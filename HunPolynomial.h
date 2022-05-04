@@ -1,21 +1,15 @@
 #include <iostream>
 #include <vector>
 
-
-class hpoly{
-
-    private:
-    std::vector<int> ppoly;
+class HunPolynomial{
+  private:
+        std::vector<int> polynomial;        
 
     public:
-    hpoly(); //creates an empty polynomial
-    hpoly(std::vector<int> poly); // set ppoly to poly
-    void set(std::vector<int> poly); // same as parameterized constructor
-    hpoly operator+ (hpoly& b);
-    hpoly operator- (hpoly& b);
-    hpoly operator* (hpoly& b);
-    float operator() (float& x);
-    //ostream& operator<<(ostream& os, const hpoly& dt) not a class member
-    
+        HunPolynomial(/* args */);
+        ~HunPolynomial();
+        void Set(std::vector<int> input);
+        std::string toString();
+        friend std::ostream& operator<<(std::ostream& out, const HunPolynomial& hp);
 };
 
