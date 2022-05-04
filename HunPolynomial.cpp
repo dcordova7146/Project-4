@@ -18,5 +18,6 @@ hpoly hpoly::operator*(hpoly& b){
 
 }
 hpoly hpoly::operator<<(hpoly& b){
+float hpoly::operator()(float& b){
 
 }

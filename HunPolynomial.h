@@ -14,7 +14,7 @@ class hpoly{
     hpoly operator+ (hpoly& b);
     hpoly operator- (hpoly& b);
     hpoly operator* (hpoly& b);
-    hpoly operator<< (hpoly& b);
+    float operator() (float& x);
     //ostream& operator<<(ostream& os, const hpoly& dt) not a class member
     
 };
