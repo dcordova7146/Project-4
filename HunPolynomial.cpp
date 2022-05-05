@@ -127,15 +127,17 @@ HunPolynomial operator+(const HunPolynomial &p1, const HunPolynomial &p2)
 
 HunPolynomial operator-(const HunPolynomial &p1, const HunPolynomial &p2)
 {
-    std::vector<int> bigBuffer = p1.polynomial.size() >= p2.polynomial.size() ? p1.polynomial : p2.polynomial;
-    std::vector<int> smallBuffer = p1.polynomial.size() < p2.polynomial.size() ? p1.polynomial : p2.polynomial;
+    std::vector<int> tmp1 = p2.polynomial;
+
+    for (int i = 0; i < tmp1.size(); i++){
+        tmp1[i] *= -1;
+    }
+
+    std::vector<int> bigBuffer = p1.polynomial.size() >= p2.polynomial.size() ? p1.polynomial : tmp1;
+    std::vector<int> smallBuffer = p1.polynomial.size() < p2.polynomial.size() ? p1.polynomial : tmp1;
 
     while(bigBuffer.size() != smallBuffer.size()){
         smallBuffer.push_back(0);
-    }
-
-    for (int i = 0; i < smallBuffer.size(); i++){
-        smallBuffer[i] *= -1;
     }
 
     std::transform (bigBuffer.begin(), bigBuffer.end(), smallBuffer.begin(), bigBuffer.begin(), std::plus<int>());
@@ -148,16 +150,16 @@ int main()
 {
     HunPolynomial defPol;
 
-    // // Printing tests. Make sure your output matches the expected output EXACTLY
-    // defPol.Set({1, 15, -1, 20});
-    // std::cout << defPol << std::endl;
-    // std::cout << "x^3 + 15*x^2 - x + 20  <= that is what you should see above exactly\n\n";
+    // Printing tests. Make sure your output matches the expected output EXACTLY
+    defPol.Set({1, 15, -1, 20});
+    std::cout << defPol << std::endl;
+    std::cout << "x^3 + 15*x^2 - x + 20  <= that is what you should see above exactly\n\n";
 
-    // HunPolynomial defPol2;
+    HunPolynomial defPol2;
 
-    // defPol2.Set({-1, 0, 1});
-    // std::cout << defPol2 << std::endl;
-    // std::cout << "- x^2 + 1  <= that is what you should see above exactly\n\n";
+    defPol2.Set({-1, 0, 1});
+    std::cout << defPol2 << std::endl;
+    std::cout << "- x^2 + 1  <= that is what you should see above exactly\n\n";
 
     // Testing operator()
     // std::cout << "The value is " << defPol(-2.5) << ". The correct value is -5.25\n\n";
@@ -168,26 +170,26 @@ int main()
     HunPolynomial Result;
     HunPolynomial Empty; // that would be an empty polinomial
 
-    // Result = X + Y;
-    // std::cout << Result << std::endl;
-    // std::cout << "- 4*x^4 + 5*x^3 + 4*x^2 - x - 31  <= that is what you should see above exactly\n\n";
+    Result = X + Y;
+    std::cout << Result << std::endl;
+    std::cout << "- 4*x^4 + 5*x^3 + 4*x^2 - x - 31  <= that is what you should see above exactly\n\n";
 
-    // Result = Y + X;
-    // std::cout << Result << std::endl;
-    // std::cout << "- 4*x^4 + 5*x^3 + 4*x^2 - x - 31  <= that is what you should see above exactly\n\n"; // testing for deconstruction? or clear cache?
+    Result = Y + X;
+    std::cout << Result << std::endl;
+    std::cout << "- 4*x^4 + 5*x^3 + 4*x^2 - x - 31  <= that is what you should see above exactly\n\n"; // testing for deconstruction? or clear cache?
 
-    // Result = X + Empty; // segmentation default core dump
-    // std::cout << Result << std::endl;
-    // std::cout << "- 4*x^4 + x^2 - 31  <= that is what you should see above exactly\n\n";
+    Result = X + Empty; // segmentation default core dump
+    std::cout << Result << std::endl;
+    std::cout << "- 4*x^4 + x^2 - 31  <= that is what you should see above exactly\n\n";
 
-    // Result = Empty + Y;
-    // std::cout << Result << std::endl;
-    // std::cout << "5*x^3 + 3*x^2 - x  <= that is what you should see above exactly\n\n";
+    Result = Empty + Y;
+    std::cout << Result << std::endl;
+    std::cout << "5*x^3 + 3*x^2 - x  <= that is what you should see above exactly\n\n";
 
-    // HunPolynomial Z{{-5, -4, 2, 0}};
-    // Result = Y + Z;
-    // std::cout << Result << std::endl;
-    // std::cout << "- x^2 + x  <= that is what you should see above exactly\n\n";
+    HunPolynomial Z{{-5, -4, 2, 0}};
+    Result = Y + Z;
+    std::cout << Result << std::endl;
+    std::cout << "- x^2 + x  <= that is what you should see above exactly\n\n";
 
     // Testing subtraction
     Result = X - Y;
