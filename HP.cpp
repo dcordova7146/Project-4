@@ -47,101 +47,60 @@ void HunPolynomial::Set(std::vector<int> input)
 std::ostream &operator<<(std::ostream &out, const HunPolynomial &hp)
 {
     std::string buffer = "";
-    bool addterm = true;
     int i;
     // std::cout << buffer.length() << std::endl;
 
     for (i = hp.polynomial.size() - 1; i >= 0; i--) // for each term in vector
     {
-
-        // buffer.append(std::to_string(hp.polynomial[i]) + "x" + "^" + std::to_string(i) + " ");
-
-        if (buffer.length() == 0)// base case
+        if (hp.polynomial[i] != 0) // add term if coefficient is not zero
         {
-            // check pos or neg 
-            if ((hp.polynomial[i] > 1) || (hp.polynomial[i] < 1 && hp.polynomial[i] > 0)) // pos coefficient reguar
+            if (buffer.length() != 0) // base case
+            /*check if not base case to add sign, otherwise are all these operations the same?*/
             {
-                buffer.append(std::to_string(hp.polynomial[i]));
-                buffer.append("*");
-            }
-            else if (hp.polynomial[i] == 1) // do not place coefficient
-            {
-                // skip adding coefficient
-            }
-            else if (hp.polynomial[i] == 0) // do not place a term
-            {
-                addterm = false;
-            }
-            else if (hp.polynomial[i] == -1)
-            {
-                buffer.append("- ");
-            }
-            else if ((hp.polynomial[i] < 0) || (hp.polynomial[i] < 0 && hp.polynomial[i] > -1)) // negative coefficient
-            {
-                buffer.append("- ");
-                buffer.append(std::to_string(std::abs(hp.polynomial[i])));
-                buffer.append("*");
-            }
-            else // invalid term?
-            {
-                std::cout << "error invalid term in polynomial?" << std::endl;
-                exit(0);
-            }
-        }
-        else if ((hp.polynomial[i] > 1) || (hp.polynomial[i] < 1 && hp.polynomial[i] > 0))
-        {
-            buffer.append("+");
-            buffer.append(" ");
-            buffer.append(std::to_string(hp.polynomial[i]));
-            buffer.append("*");
-        }
-        else if (hp.polynomial[i] == 1)
-        {
-            buffer.append("+");
-            buffer.append(" ");
-        }
-        else if (hp.polynomial[i] == 0)
-        {
-            addterm = false;
-        }
-        else if (hp.polynomial[i] == -1)
-        {
-            buffer.append("-");
-            buffer.append(" ");
-        }
-        else if ((hp.polynomial[i] < 0) || (hp.polynomial[i] < 0 && hp.polynomial[i] > -1))
-        {
-            buffer.append("-");
-            buffer.append(" ");
-            buffer.append(std::to_string(std::abs(hp.polynomial[i])));
-        }
-
-        if (addterm == true) // true if coefficient is not 0
-        {
-            switch (i)
-            {
-            case 1:
-                buffer.append("x");
                 buffer.append(" ");
-                break;
-            case 0:
-                if (hp.polynomial[i] == 1)
+                if (hp.polynomial[i] < 0)
+                {
+                    buffer.append("-");
+                }
+                else if (hp.polynomial[i] > 0)
+                {
+                    buffer.append("+");
+                }
+                buffer.append(" ");
+            }
+            else if (buffer.length() == 0 && hp.polynomial[i] < 0)
+            {
+                buffer.append("-");
+                buffer.append(" ");
+            }
+
+            if ((hp.polynomial[i] == 1) || (hp.polynomial[i] == -1))
+            {
+                if (i == 0)
                 {
                     buffer.append("1");
                 }
-                else if (hp.polynomial[i] > 1)
-                { // this is janky
-                    buffer.pop_back();
+            }
+            else
+            {
+                buffer.append(std::to_string(std::abs(hp.polynomial[i])));
+                if (i != 0)
+                {
+                    buffer.append("*");
                 }
-                break;
-            default:
+            }
+
+            if (i == 1)
+            {
+                buffer.append("x");
+            }
+            else if (i != 0)
+            {
                 buffer.append("x");
                 buffer.append("^");
                 buffer.append(std::to_string(i));
-                buffer.append(" ");
             }
         }
-        addterm = true;
 
         // std::cout << "index: " << i << " num:  " << hp.polynomial[i] << " pow:  " << i <<std::endl;
     }
