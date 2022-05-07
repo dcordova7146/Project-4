@@ -1,4 +1,4 @@
-#include <HunPolynomial.h>
+#include "HunPolynomial.h"
 
 
 HunPolynomial::HunPolynomial(/* args */)
