@@ -1,23 +1,32 @@
 #include <iostream>
 #include "HunPolynomial.h"
 
-hpoly::hpoly(std::vector<int> poly){
-    ppoly = poly;
-}
-void hpoly::set(std::vector<int> poly){
-    ppoly = poly;
-}
+HunPolynomial::HunPolynomial(std::vector<int> poly){
+       
+    for(int i = 0;i<poly.size();i++){
+        //first term and last term are treated differently
+        if(i = 0){ //first term cases
+            if(poly[i] < 0){
+                polynomial.push_back('-');
+            }
+        }
+        if(i = poly.size() -1){//last term cases
 
-hpoly hpoly::operator+(hpoly& b){
+        }
+    }
+}
+void HunPolynomial::Set(std::vector<int> poly){
+   polyvec = poly;
+}
+HunPolynomial HunPolynomial::operator+(HunPolynomial& b){
 
 }
-hpoly hpoly::operator-(hpoly& b){
+HunPolynomial HunPolynomial::operator-(HunPolynomial& b){
 
 }
-hpoly hpoly::operator*(hpoly& b){
+HunPolynomial HunPolynomial::operator*(HunPolynomial& b){
 
 }
-hpoly hpoly::operator<<(hpoly& b){
-float hpoly::operator()(float& b){
+float HunPolynomial::operator()(float& b){
 
 }
