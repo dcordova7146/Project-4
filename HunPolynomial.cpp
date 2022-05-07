@@ -113,37 +113,65 @@ HunPolynomial operator+(const HunPolynomial &p1, const HunPolynomial &p2)
     std::vector<int> bigBuffer = p1.polynomial.size() >= p2.polynomial.size() ? p1.polynomial : p2.polynomial;
     std::vector<int> smallBuffer = p1.polynomial.size() < p2.polynomial.size() ? p1.polynomial : p2.polynomial;
 
-    while(bigBuffer.size() != smallBuffer.size()){
+    while (bigBuffer.size() != smallBuffer.size())
+    {
         smallBuffer.push_back(0);
     }
 
-    std::transform (bigBuffer.begin(), bigBuffer.end(), smallBuffer.begin(), bigBuffer.begin(), std::plus<int>());
+    std::transform(bigBuffer.begin(), bigBuffer.end(), smallBuffer.begin(), bigBuffer.begin(), std::plus<int>());
 
     std::reverse(bigBuffer.begin(), bigBuffer.end());
     return bigBuffer;
-
-
 }
 
 HunPolynomial operator-(const HunPolynomial &p1, const HunPolynomial &p2)
 {
     std::vector<int> tmp1 = p2.polynomial;
 
-    for (int i = 0; i < tmp1.size(); i++){
+    for (int i = 0; i < tmp1.size(); i++)
+    {
         tmp1[i] *= -1;
     }
 
     std::vector<int> bigBuffer = p1.polynomial.size() >= p2.polynomial.size() ? p1.polynomial : tmp1;
     std::vector<int> smallBuffer = p1.polynomial.size() < p2.polynomial.size() ? p1.polynomial : tmp1;
 
-    while(bigBuffer.size() != smallBuffer.size()){
+    while (bigBuffer.size() != smallBuffer.size())
+    {
         smallBuffer.push_back(0);
     }
 
-    std::transform (bigBuffer.begin(), bigBuffer.end(), smallBuffer.begin(), bigBuffer.begin(), std::plus<int>());
+    std::transform(bigBuffer.begin(), bigBuffer.end(), smallBuffer.begin(), bigBuffer.begin(), std::plus<int>());
 
     std::reverse(bigBuffer.begin(), bigBuffer.end());
     return bigBuffer;
+}
+
+HunPolynomial operator*(const HunPolynomial &p1, const HunPolynomial &p2)
+{
+    std::vector<int> bigBuffer = p1.polynomial.size() >= p2.polynomial.size() ? p1.polynomial : p2.polynomial;
+    std::vector<int> smallBuffer = p1.polynomial.size() < p2.polynomial.size() ? p1.polynomial : p2.polynomial;
+    std::vector<int> resultBuffer;
+
+    for(int a = 0; a < (bigBuffer.size() + smallBuffer.size() - 2) ; a++){
+        resultBuffer.push_back(0);
+    }
+
+    while (bigBuffer.size() != smallBuffer.size())
+    {
+        smallBuffer.push_back(0);
+    }
+
+    for (int i = 0; i < bigBuffer.size(); i++)
+    {
+        for (int j = 0; j < smallBuffer.size(); j++)
+        {
+            resultBuffer[i + j] += bigBuffer[i] + smallBuffer[j];
+        }
+    }
+
+    std::reverse(resultBuffer.begin(), resultBuffer.end());
+    return resultBuffer;
 }
 
 int main()
@@ -170,43 +198,63 @@ int main()
     HunPolynomial Result;
     HunPolynomial Empty; // that would be an empty polinomial
 
-    Result = X + Y;
-    std::cout << Result << std::endl;
-    std::cout << "- 4*x^4 + 5*x^3 + 4*x^2 - x - 31  <= that is what you should see above exactly\n\n";
+    // Result = X + Y;
+    // std::cout << Result << std::endl;
+    // std::cout << "- 4*x^4 + 5*x^3 + 4*x^2 - x - 31  <= that is what you should see above exactly\n\n";
 
-    Result = Y + X;
-    std::cout << Result << std::endl;
-    std::cout << "- 4*x^4 + 5*x^3 + 4*x^2 - x - 31  <= that is what you should see above exactly\n\n"; // testing for deconstruction? or clear cache?
+    // Result = Y + X;
+    // std::cout << Result << std::endl;
+    // std::cout << "- 4*x^4 + 5*x^3 + 4*x^2 - x - 31  <= that is what you should see above exactly\n\n"; // testing for deconstruction? or clear cache?
 
-    Result = X + Empty; // segmentation default core dump
-    std::cout << Result << std::endl;
-    std::cout << "- 4*x^4 + x^2 - 31  <= that is what you should see above exactly\n\n";
+    // Result = X + Empty; // segmentation default core dump
+    // std::cout << Result << std::endl;
+    // std::cout << "- 4*x^4 + x^2 - 31  <= that is what you should see above exactly\n\n";
 
-    Result = Empty + Y;
-    std::cout << Result << std::endl;
-    std::cout << "5*x^3 + 3*x^2 - x  <= that is what you should see above exactly\n\n";
+    // Result = Empty + Y;
+    // std::cout << Result << std::endl;
+    // std::cout << "5*x^3 + 3*x^2 - x  <= that is what you should see above exactly\n\n";
 
-    HunPolynomial Z{{-5, -4, 2, 0}};
-    Result = Y + Z;
-    std::cout << Result << std::endl;
-    std::cout << "- x^2 + x  <= that is what you should see above exactly\n\n";
+    // HunPolynomial Z{{-5, -4, 2, 0}};
+    // Result = Y + Z;
+    // std::cout << Result << std::endl;
+    // std::cout << "- x^2 + x  <= that is what you should see above exactly\n\n";
 
-    // Testing subtraction
-    Result = X - Y;
-    std::cout << Result << std::endl;
-    std::cout << "- 4*x^4 - 5*x^3 - 2*x^2 + x - 31  <= that is what you should see above exactly\n\n";
+    // // Testing subtraction
+    // Result = X - Y;
+    // std::cout << Result << std::endl;
+    // std::cout << "- 4*x^4 - 5*x^3 - 2*x^2 + x - 31  <= that is what you should see above exactly\n\n";
 
-    Result = Y - X;
-    std::cout << Result << std::endl;
-    std::cout << "4*x^4 + 5*x^3 + 2*x^2 - x + 31  <= that is what you should see above exactly\n\n";
+    // Result = Y - X;
+    // std::cout << Result << std::endl;
+    // std::cout << "4*x^4 + 5*x^3 + 2*x^2 - x + 31  <= that is what you should see above exactly\n\n";
 
-    Result = Y - Empty;
-    std::cout << Result << std::endl;
-    std::cout << "5*x^3 + 3*x^2 - x  <= that is what you should see above exactly\n\n";
+    // Result = Y - Empty;
+    // std::cout << Result << std::endl;
+    // std::cout << "5*x^3 + 3*x^2 - x  <= that is what you should see above exactly\n\n";
 
-    Result = Empty - Y;
+    // Result = Empty - Y;
+    // std::cout << Result << std::endl;
+    // std::cout << "- 5*x^3 - 3*x^2 + x  <= that is what you should see above exactly\n\n";
+
+    // Testing multiplication
+    HunPolynomial A{{2, 0, 0, 0, 1, 6}};
+    HunPolynomial B{{1, -4, 0}};
+
+    Result = A * B;
     std::cout << Result << std::endl;
-    std::cout << "- 5*x^3 - 3*x^2 + x  <= that is what you should see above exactly\n\n";
+    std::cout << "2*x^7 - 8*x^6 + x^3 + 2*x^2 - 24*x  <= that is what you should see above exactly\n\n";
+
+    Result = B * A;
+    std::cout << Result << std::endl;
+    std::cout << "2*x^7 - 8*x^6 + x^3 + 2*x^2 - 24*x  <= that is what you should see above exactly\n\n";
+
+    Result = A * Empty;
+    std::cout << Result << std::endl;
+    std::cout << "Above should be an empty line or any other indication of empty polinomial\n\n";
+
+    Result = Empty * A;
+    std::cout << Result << std::endl;
+    std::cout << "Above should be an empty line or any other indication of empty polinomial\n\n";
 
     return 0;
 }
