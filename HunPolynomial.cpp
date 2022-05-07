@@ -1,26 +1,5 @@
-// #include <HunPolynomial.h>
-#include <iostream>
-#include <vector>
-#include <sstream>
-#include <cmath>
-#include <string>
-#include <algorithm>
+#include <HunPolynomial.h>
 
-class HunPolynomial
-{
-private:
-    std::vector<int> polynomial;
-
-public:
-    HunPolynomial(/* args */);
-    HunPolynomial(std::vector<int> input);
-    ~HunPolynomial();
-    void Set(std::vector<int> input);
-    friend std::ostream &operator<<(std::ostream &out, const HunPolynomial &hp);
-    friend HunPolynomial operator+(const HunPolynomial &p1, const HunPolynomial &p2);
-    friend HunPolynomial operator-(const HunPolynomial &p1, const HunPolynomial &p2);
-    friend HunPolynomial operator*(const HunPolynomial &p1, const HunPolynomial &p2);
-};
 
 HunPolynomial::HunPolynomial(/* args */)
 {
@@ -45,7 +24,6 @@ std::ostream &operator<<(std::ostream &out, const HunPolynomial &hp)
 {
     std::string buffer = "";
     int i;
-    // std::cout << buffer.length() << std::endl;
 
     for (i = hp.polynomial.size() - 1; i >= 0; i--) // for each term in vector
     {
@@ -99,10 +77,7 @@ std::ostream &operator<<(std::ostream &out, const HunPolynomial &hp)
             }
         }
 
-        // std::cout << "index: " << i << " num:  " << hp.polynomial[i] << " pow:  " << i <<std::endl;
     }
-
-    // std::cout << "index: " << i << " num:  " << hp.polynomial[i] << " pow:  " << i <<std::endl;
 
     out << buffer;
     return out;
@@ -153,7 +128,7 @@ HunPolynomial operator*(const HunPolynomial &p1, const HunPolynomial &p2)
     std::vector<int> smallBuffer = p1.polynomial.size() < p2.polynomial.size() ? p1.polynomial : p2.polynomial;
     std::vector<int> resultBuffer;
 
-    for(int a = 0; a < (bigBuffer.size() + smallBuffer.size() - 2) ; a++){
+    for(int a = 0; a < (bigBuffer.size() + smallBuffer.size() - 1) ; a++){
         resultBuffer.push_back(0);
     }
 
@@ -166,7 +141,7 @@ HunPolynomial operator*(const HunPolynomial &p1, const HunPolynomial &p2)
     {
         for (int j = 0; j < smallBuffer.size(); j++)
         {
-            resultBuffer[i + j] += bigBuffer[i] + smallBuffer[j];
+            resultBuffer[i + j] += bigBuffer[i] * smallBuffer[j];
         }
     }
 
@@ -174,87 +149,96 @@ HunPolynomial operator*(const HunPolynomial &p1, const HunPolynomial &p2)
     return resultBuffer;
 }
 
+float HunPolynomial::operator()(float num){
+    float result = 0.00;
+
+
+    for(int i = 0; i < polynomial.size(); i++){
+        result +=  polynomial[i] * pow(num, i);
+    }
+
+    return result;
+}
+
 int main()
 {
-    HunPolynomial defPol;
+	HunPolynomial defPol;
 
-    // Printing tests. Make sure your output matches the expected output EXACTLY
-    defPol.Set({1, 15, -1, 20});
-    std::cout << defPol << std::endl;
-    std::cout << "x^3 + 15*x^2 - x + 20  <= that is what you should see above exactly\n\n";
+	// Printing tests. Make sure your output matches the expected output EXACTLY
+	defPol.Set({ 1, 15, -1, 20 });
+	std::cout << defPol << std::endl;
+	std::cout << "x^3 + 15*x^2 - x + 20  <= that is what you should see above exactly\n\n";
 
-    HunPolynomial defPol2;
+	defPol.Set({ -1, 0, 1 });
+	std::cout << defPol <<std::endl;
+	std::cout << "- x^2 + 1  <= that is what you should see above exactly\n\n";
 
-    defPol2.Set({-1, 0, 1});
-    std::cout << defPol2 << std::endl;
-    std::cout << "- x^2 + 1  <= that is what you should see above exactly\n\n";
+	// Testing operator()
+	std::cout << "The value is " << defPol(-2.5) << ". The correct value is -5.25\n\n";
 
-    // Testing operator()
-    // std::cout << "The value is " << defPol(-2.5) << ". The correct value is -5.25\n\n";
+	// Testing addition
+	HunPolynomial X{ { -4, 0, 1, 0, -31 } };
+	HunPolynomial Y{ { 5, 3, -1, 0 } };
+	HunPolynomial Result;
+	HunPolynomial Empty; // that would be an empty polinomial
 
-    // Testing addition
-    HunPolynomial X{{-4, 0, 1, 0, -31}};
-    HunPolynomial Y{{5, 3, -1, 0}};
-    HunPolynomial Result;
-    HunPolynomial Empty; // that would be an empty polinomial
+	Result = X + Y;
+	std::cout << Result << std::endl;
+	std::cout << "- 4*x^4 + 5*x^3 + 4*x^2 - x - 31  <= that is what you should see above exactly\n\n";
 
-    // Result = X + Y;
-    // std::cout << Result << std::endl;
-    // std::cout << "- 4*x^4 + 5*x^3 + 4*x^2 - x - 31  <= that is what you should see above exactly\n\n";
+	Result = Y + X;
+	std::cout << Result << std::endl;
+	std::cout << "- 4*x^4 + 5*x^3 + 4*x^2 - x - 31  <= that is what you should see above exactly\n\n";
 
-    // Result = Y + X;
-    // std::cout << Result << std::endl;
-    // std::cout << "- 4*x^4 + 5*x^3 + 4*x^2 - x - 31  <= that is what you should see above exactly\n\n"; // testing for deconstruction? or clear cache?
+	Result = X + Empty;
+	std::cout << Result << std::endl;
+	std::cout << "- 4*x^4 + x^2 - 31  <= that is what you should see above exactly\n\n";
 
-    // Result = X + Empty; // segmentation default core dump
-    // std::cout << Result << std::endl;
-    // std::cout << "- 4*x^4 + x^2 - 31  <= that is what you should see above exactly\n\n";
+	Result = Empty + Y;
+	std::cout << Result << std::endl;
+	std::cout << "5*x^3 + 3*x^2 - x  <= that is what you should see above exactly\n\n";
 
-    // Result = Empty + Y;
-    // std::cout << Result << std::endl;
-    // std::cout << "5*x^3 + 3*x^2 - x  <= that is what you should see above exactly\n\n";
+	HunPolynomial Z{ { -5, -4, 2, 0 } };
+	Result = Y + Z;
+	std::cout << Result << std::endl;
+	std::cout << "- x^2 + x  <= that is what you should see above exactly\n\n";
 
-    // HunPolynomial Z{{-5, -4, 2, 0}};
-    // Result = Y + Z;
-    // std::cout << Result << std::endl;
-    // std::cout << "- x^2 + x  <= that is what you should see above exactly\n\n";
+	// Testing subtraction
+	Result = X - Y;
+	std::cout << Result << std::endl;
+	std::cout << "- 4*x^4 - 5*x^3 - 2*x^2 + x - 31  <= that is what you should see above exactly\n\n";
 
-    // // Testing subtraction
-    // Result = X - Y;
-    // std::cout << Result << std::endl;
-    // std::cout << "- 4*x^4 - 5*x^3 - 2*x^2 + x - 31  <= that is what you should see above exactly\n\n";
+	Result = Y - X;
+	std::cout << Result << std::endl;
+	std::cout << "4*x^4 + 5*x^3 + 2*x^2 - x + 31  <= that is what you should see above exactly\n\n";
 
-    // Result = Y - X;
-    // std::cout << Result << std::endl;
-    // std::cout << "4*x^4 + 5*x^3 + 2*x^2 - x + 31  <= that is what you should see above exactly\n\n";
+	Result = Y - Empty;
+	std::cout << Result << std::endl;
+	std::cout << "5*x^3 + 3*x^2 - x  <= that is what you should see above exactly\n\n";
 
-    // Result = Y - Empty;
-    // std::cout << Result << std::endl;
-    // std::cout << "5*x^3 + 3*x^2 - x  <= that is what you should see above exactly\n\n";
+	Result = Empty - Y;
+	std::cout << Result << std::endl;
+	std::cout << "- 5*x^3 - 3*x^2 + x  <= that is what you should see above exactly\n\n";
 
-    // Result = Empty - Y;
-    // std::cout << Result << std::endl;
-    // std::cout << "- 5*x^3 - 3*x^2 + x  <= that is what you should see above exactly\n\n";
+	// Testing multiplication
+	HunPolynomial A{ { 2, 0, 0, 0, 1, 6 } };
+	HunPolynomial B{ { 1, -4, 0 } };
 
-    // Testing multiplication
-    HunPolynomial A{{2, 0, 0, 0, 1, 6}};
-    HunPolynomial B{{1, -4, 0}};
+	Result = A * B;
+	std::cout << Result << std::endl;
+	std::cout << "2*x^7 - 8*x^6 + x^3 + 2*x^2 - 24*x  <= that is what you should see above exactly\n\n";
 
-    Result = A * B;
-    std::cout << Result << std::endl;
-    std::cout << "2*x^7 - 8*x^6 + x^3 + 2*x^2 - 24*x  <= that is what you should see above exactly\n\n";
+	Result = B * A;
+	std::cout << Result << std::endl;
+	std::cout << "2*x^7 - 8*x^6 + x^3 + 2*x^2 - 24*x  <= that is what you should see above exactly\n\n";
 
-    Result = B * A;
-    std::cout << Result << std::endl;
-    std::cout << "2*x^7 - 8*x^6 + x^3 + 2*x^2 - 24*x  <= that is what you should see above exactly\n\n";
+	Result = A * Empty;
+	std::cout << Result << std::endl;
+	std::cout << "Above should be an empty line or any other indication of empty polinomial\n\n";
 
-    Result = A * Empty;
-    std::cout << Result << std::endl;
-    std::cout << "Above should be an empty line or any other indication of empty polinomial\n\n";
+	Result = Empty * A;
+	std::cout << Result << std::endl;
+	std::cout << "Above should be an empty line or any other indication of empty polinomial\n\n";
 
-    Result = Empty * A;
-    std::cout << Result << std::endl;
-    std::cout << "Above should be an empty line or any other indication of empty polinomial\n\n";
-
-    return 0;
+	return 0;
 }
