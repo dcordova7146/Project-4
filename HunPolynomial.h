@@ -11,13 +11,12 @@ private:
     std::vector<int> polynomial;
 
 public:
-    HunPolynomial(/* args */);
+    HunPolynomial();
     HunPolynomial(std::vector<int> input);
-    ~HunPolynomial();
     void Set(std::vector<int> input);
+    HunPolynomial operator+(const HunPolynomial &b);
+    HunPolynomial operator-(const HunPolynomial &b);
+    HunPolynomial operator*(const HunPolynomial &b);
+    float operator()(const float xval);
     friend std::ostream &operator<<(std::ostream &out, const HunPolynomial &hp);
-    friend HunPolynomial operator+(const HunPolynomial &p1, const HunPolynomial &p2);
-    friend HunPolynomial operator-(const HunPolynomial &p1, const HunPolynomial &p2);
-    friend HunPolynomial operator*(const HunPolynomial &p1, const HunPolynomial &p2);
-    float operator()(const float num);
 };
