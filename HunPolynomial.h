@@ -9,7 +9,6 @@ class HunPolynomial
 {
 private:
     std::vector<int> polynomial;
-
 public:
     HunPolynomial();
     HunPolynomial(std::vector<int> input);
